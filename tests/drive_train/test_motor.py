@@ -37,3 +37,29 @@ def test_three_pin_motor_move(
     assert expected_forward_value == three_pin_motor.forward_device.value
     assert expected_reverse_value == three_pin_motor.reverse_device.value
     assert expected_speed_value == three_pin_motor.speed_device.value
+
+
+@pytest.mark.parametrize("speed", (-1, -0.5, 0, 0.5, 1))
+def test_three_pin_motor_speed(three_pin_motor: ThreePinMotor, speed):
+    three_pin_motor.move(speed)
+    assert float(three_pin_motor.speed) == float(speed)
+
+
+def test_three_pin_motor_enable(three_pin_motor: ThreePinMotor):
+    three_pin_motor.disable()
+    three_pin_motor.enable()
+    assert three_pin_motor.enable_device.value
+
+
+def test_three_pin_motor_disable(three_pin_motor: ThreePinMotor):
+    three_pin_motor.enable()
+    three_pin_motor.disable()
+    assert not three_pin_motor.enable_device.value
+
+
+def test_three_pin_motor_stop(three_pin_motor: ThreePinMotor):
+    three_pin_motor.move(1)
+    three_pin_motor.stop()
+    assert not three_pin_motor.forward_device.value
+    assert not three_pin_motor.reverse_device.value
+    assert three_pin_motor.speed_device.value == 0

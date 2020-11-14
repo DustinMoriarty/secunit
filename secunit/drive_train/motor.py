@@ -53,10 +53,10 @@ class ThreePinMotor(MotorAbc):
 
     @property
     def speed(self):
-        if self.reverse_device and self.forward_device:
+        if self.reverse_device.value and self.forward_device.value:
             raise ValueError("reverse_device and forward_device are both true.")
-        sgn = -1 if self.reverse_device.value and not self.forward_device else 1
-        return sgn * self.speed_device
+        sgn = -1 if self.reverse_device.value and not self.forward_device.value else 1
+        return sgn * self.speed_device.value
 
     def move(self, speed: Union[SupportsFloat, SupportsAbs]):
         _speed = float(saturate(speed, -1, 1))
