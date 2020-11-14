@@ -8,6 +8,7 @@ import pytest
 class MockMotor(MotorAbc):
     def __init__(self):
         self._speed = 0
+        self._enabled = False
 
     @property
     def speed(self):
@@ -15,6 +16,12 @@ class MockMotor(MotorAbc):
 
     def move(self, speed: SupportsFloat):
         self._speed = speed
+
+    def enable(self):
+        self._enabled = True
+
+    def disable(self):
+        self._enabled = False
 
 
 @pytest.fixture()

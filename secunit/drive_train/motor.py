@@ -1,10 +1,10 @@
 from abc import ABC, abstractmethod
 from typing import SupportsFloat, SupportsAbs, Union
 from gpiozero import DigitalOutputDevice, PWMOutputDevice
+from secunit.utils import saturate
 
 
 class MotorAbc(ABC):
-
     @property
     @abstractmethod
     def speed(self):
@@ -23,19 +23,33 @@ class MotorAbc(ABC):
         """
         ...
 
+    @abstractmethod
+    def enable(self): ...
+
+    @abstractmethod
+    def disable(self): ...
+
 
 class ThreePinMotor(MotorAbc):
-
     def __init__(
-            self,
-            forward_device: DigitalOutputDevice,
-            reverse_device: DigitalOutputDevice,
-            speed_device: PWMOutputDevice
+        self,
+        forward_device: DigitalOutputDevice,
+        reverse_device: DigitalOutputDevice,
+        speed_device: PWMOutputDevice,
+        enable_device: DigitalOutputDevice
     ):
+        """
+        Control a motor on a motor controller such as TB6612FNG.
+        :param forward_device: Pin for reverse.
+        :param reverse_device: Pin for forward.
+        :param speed_device: Pin for speed.
+        :param enable_device: Pin used to enable the motor.
+        """
         super().__init__()
         self.forward_device = forward_device
         self.reverse_device = reverse_device
         self.speed_device = speed_device
+        self.enable_device = enable_device
 
     @property
     def speed(self):
@@ -45,6 +59,13 @@ class ThreePinMotor(MotorAbc):
         return sgn * self.speed_device
 
     def move(self, speed: Union[SupportsFloat, SupportsAbs]):
-        self.forward_device = bool(float(speed) >= 0)
-        self.reverse_device = bool(float(speed) < 0)
-        self.speed_device = abs(speed)
+        _speed = float(saturate(speed, -1, 1))
+        self.forward_device.value = bool(_speed > 0)
+        self.reverse_device.value = bool(_speed < 0)
+        self.speed_device.value = abs(_speed)
+
+    def enable(self):
+        self.enable_device.value = True
+
+    def disable(self):
+        self.enable_device.value = False

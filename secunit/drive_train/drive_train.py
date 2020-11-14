@@ -1,5 +1,3 @@
-from typing import SupportsFloat
-
 from secunit.drive_train.motor import MotorAbc
 from secunit.utils import saturate
 
@@ -14,3 +12,7 @@ class DriveTrain:
         speed_right = saturate(translate + rotate, -1, 1)
         self.left_motor.move(speed_left)
         self.right_motor.move(speed_right)
+
+    def stop(self):
+        self.left_motor.stop()
+        self.right_motor.stop()
