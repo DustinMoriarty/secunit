@@ -5,7 +5,7 @@ description = ""
 authors = ["DustinMoriarty <dustin.moriarty@protonmail.com>"]
 
 [tool.poetry.dependencies]
-python = "^3.6"
+python = "^3.7.3"
 gpiozero = "^1.5.1"
 coverage = "^5.3"
 
