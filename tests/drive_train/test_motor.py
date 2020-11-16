@@ -1,5 +1,7 @@
 from typing import SupportsFloat
+
 import pytest
+
 from secunit.drive_train.motor import ThreePinMotor
 
 
@@ -19,11 +21,7 @@ def three_pin_motor():
         "expected_reverse_value",
         "expected_speed_value",
     ),
-    (
-            (1, True, False, 1),
-            (0, False, False, 0),
-            (-1, False, True, 1)
-    )
+    ((1, True, False, 1), (0, False, False, 0), (-1, False, True, 1)),
 )
 def test_three_pin_motor_move(
     three_pin_motor: ThreePinMotor,

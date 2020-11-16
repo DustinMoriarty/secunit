@@ -1,8 +1,9 @@
 from typing import SupportsFloat
 
+import pytest
+
 from secunit.drive_train.drive_train import DriveTrain
 from secunit.drive_train.motor import MotorAbc
-import pytest
 
 
 class MockMotor(MotorAbc):

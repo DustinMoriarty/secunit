@@ -1,6 +1,8 @@
 from abc import ABC, abstractmethod
-from typing import SupportsFloat, SupportsAbs, Union
+from typing import SupportsAbs, SupportsFloat, Union
+
 from gpiozero import DigitalOutputDevice, PWMOutputDevice
+
 from secunit.utils import saturate
 
 
@@ -24,10 +26,12 @@ class MotorAbc(ABC):
         ...
 
     @abstractmethod
-    def enable(self): ...
+    def enable(self):
+        ...
 
     @abstractmethod
-    def disable(self): ...
+    def disable(self):
+        ...
 
 
 class ThreePinMotor(MotorAbc):
@@ -36,7 +40,7 @@ class ThreePinMotor(MotorAbc):
         forward_device: DigitalOutputDevice,
         reverse_device: DigitalOutputDevice,
         speed_device: PWMOutputDevice,
-        enable_device: DigitalOutputDevice
+        enable_device: DigitalOutputDevice,
     ):
         """
         Control a motor on a motor controller such as TB6612FNG.

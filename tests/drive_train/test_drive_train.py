@@ -1,5 +1,7 @@
-import pytest
 from typing import SupportsFloat
+
+import pytest
+
 from secunit.drive_train.drive_train import DriveTrain
 
 
