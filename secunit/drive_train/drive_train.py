@@ -1,7 +1,11 @@
 from secunit.drive_train.motor import MotorAbc
 from secunit.utils import saturate
+from secunit.config import App
+
+APP = App()
 
 
+@APP.component()
 class DriveTrain:
     def __init__(self, left_motor: MotorAbc, right_motor: MotorAbc):
         self.left_motor = left_motor

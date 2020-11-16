@@ -2,11 +2,14 @@ from typing import SupportsFloat
 
 import pytest
 
-from secunit.drive_train.motor import ThreePinMotor
+from secunit.drive_train.motor import ThreePinMotor, APP, DeviceFactory
+from secunit.config.app import get_type
 
 
 class MockDevice:
-    value = None
+    def __init__(self, pin=None):
+        self.value = None
+        self.pin = pin
 
 
 @pytest.fixture()
@@ -61,3 +64,15 @@ def test_three_pin_motor_stop(three_pin_motor: ThreePinMotor):
     assert not three_pin_motor.forward_device.value
     assert not three_pin_motor.reverse_device.value
     assert three_pin_motor.speed_device.value == 0
+
+
+def test_app(monkeypatch):
+    DeviceFactory.test = True
+    context = {
+        "forward_device": {"pin": 26},
+        "reverse_device": {"pin": 19},
+        "speed_device": {"pin": 21, "frequency": 10000},
+        "enable_device": {"pin": 25}
+    }
+    motor: ThreePinMotor = APP.build(get_type(ThreePinMotor), context)
+    assert context["forward_device"]["pin"] == motor.forward_device.pin.number

@@ -16,3 +16,7 @@ class InvalidConfigKey(ConfigError):
 
 class TypeNotDefined(ConfigError):
     ...
+
+
+class AppMergeCollisions(ConfigError):
+    ...

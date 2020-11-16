@@ -2,13 +2,14 @@ from logging import DEBUG
 
 import pytest
 
-from secunit.config.app import App, mk_logger
+from secunit.config.app import App
+from secunit.utils import default_logger
 from secunit.config.component import Component
 
 
 @pytest.fixture()
 def app():
-    logger = mk_logger("test", DEBUG)
+    logger = default_logger("test", DEBUG)
     app = App(logger=logger)
 
     @app.component(arg1=int, arg2=float, kwarg1=int, kwarg2=str)

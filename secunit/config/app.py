@@ -1,21 +1,10 @@
-from logging import INFO, Formatter, StreamHandler, getLogger
-from sys import stderr
+from logging import INFO
 from typing import Callable, Dict, Text, Tuple
 
 from secunit.config.component import Component
 from secunit.config.exc import (ComponentNotFound, InvalidConfigKey,
-                                KeyNotInConfig, TypeNotDefined)
-
-
-def mk_logger(name, level):
-    logger = getLogger(name)
-    logger.setLevel(level)
-    sh = StreamHandler(stderr)
-    sh.setLevel(level)
-    logger.addHandler(sh)
-    fmt = Formatter(fmt="%(asctime)s %(levelname)s %(name)s %(message)s")
-    sh.setFormatter(fmt)
-    return logger
+                                TypeNotDefined, AppMergeCollisions)
+from secunit.utils import default_logger
 
 
 def get_type(f: Callable):
@@ -25,8 +14,22 @@ def get_type(f: Callable):
 class App:
     def __init__(self, logger=None):
         self._constructors: Dict[Text, Component] = {}
-        self.logger = logger if logger is not None else mk_logger(str(self), INFO)
+        self.logger = logger if logger is not None else default_logger(str(self), INFO)
         self.logger.debug("Created App.")
+
+    def __add__(self, other):
+        collisions = set(self.constructors.keys()) & set(other.constructors.keys())
+        if collisions:
+            raise AppMergeCollisions(
+                f"Apps cannot be merged due to collisions on the following "
+                f"keys {collisions}"
+            )
+        new = type(self)()
+        for k, v in self.constructors.items():
+            new.set_constructor(k, v)
+        for k, v in other.constructors.items():
+            new.set_constructor(k, v)
+        return new
 
     @property
     def constructors(self):
