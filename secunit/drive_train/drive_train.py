@@ -1,6 +1,7 @@
 from secunit.config import App
 from secunit.drive_train.motor import MotorAbc
 from secunit.utils import saturate
+from time import sleep
 
 APP = App()
 
@@ -16,6 +17,11 @@ class DriveTrain:
         speed_right = saturate(translate + rotate, -1, 1)
         self.left_motor.move(speed_left)
         self.right_motor.move(speed_right)
+
+    def step(self, translate, rotate, t=0.02):
+        self.move(translate, rotate)
+        sleep(t)
+        self.stop()
 
     def stop(self):
         self.left_motor.stop()

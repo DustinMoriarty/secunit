@@ -75,6 +75,8 @@ class App:
             if hasattr(arg, "items"):
                 if arg_name in constructor.arg_types:
                     arg_tp = str(get_type(constructor.arg_types[arg_name]))
+                elif arg_name.lower() in constructor.arg_types:
+                    arg_tp = str(get_type(constructor.arg_types[arg_name.lower()]))
                 elif "type" in arg:
                     arg_tp = str(arg.pop("type"))
                 else:
