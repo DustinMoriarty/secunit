@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 from typing import SupportsAbs, SupportsFloat, Union
 
 from gpiozero import DigitalOutputDevice, PWMOutputDevice
+from gpiozero.pins.mock import MockFactory, MockPWMPin
 
 from secunit.config import App
 from secunit.utils import saturate
@@ -39,6 +40,11 @@ class MotorAbc(ABC):
     @abstractmethod
     def close(self):
         ...
+
+
+@APP.component()
+def mock_factory():
+    return MockFactory(pin_class=MockPWMPin)
 
 
 @APP.component(pin=int, active_high=bool, initial_value=bool)

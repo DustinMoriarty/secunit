@@ -2,6 +2,7 @@ from secunit.config import App
 from secunit.drive_train.motor import MotorAbc
 from secunit.utils import saturate
 from time import sleep
+from typing import NamedTuple, SupportsFloat
 
 APP = App()
 
@@ -30,3 +31,12 @@ class DriveTrain:
     def close(self):
         self.left_motor.close()
         self.right_motor.close()
+
+
+class DriveTrainState(NamedTuple):
+    left_motor_speed: SupportsFloat
+    right_motor_speed: SupportsFloat
+
+
+def drive_train_state(drive_train: DriveTrain):
+    return DriveTrainState(drive_train.left_motor.speed, drive_train.right_motor.speed)

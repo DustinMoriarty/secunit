@@ -15,7 +15,7 @@ def drive_train_config() -> Dict:
                 "type": "ThreePinMotor",
                 "forward_device": {"pin": 1},
                 "reverse_device": {"pin": "2"},
-                "speed_device": {"pin": 3},
+                "speed_device": {"pin": 3.0},
                 "enable_device": {"pin": 4},
             },
             "right_motor": {
