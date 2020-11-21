@@ -2,7 +2,6 @@ from abc import ABC, abstractmethod
 from typing import SupportsAbs, SupportsFloat, Union
 
 from gpiozero import DigitalOutputDevice, PWMOutputDevice
-from gpiozero.pins.mock import MockFactory, MockPin, MockPWMPin
 
 from secunit.config import App
 from secunit.utils import saturate
@@ -35,6 +34,10 @@ class MotorAbc(ABC):
 
     @abstractmethod
     def disable(self):
+        ...
+
+    @abstractmethod
+    def close(self):
         ...
 
 
@@ -100,3 +103,13 @@ class ThreePinMotor(MotorAbc):
 
     def disable(self):
         self.enable_device.value = False
+
+    def close(self):
+        self.forward_device.value = False
+        self.reverse_device.value = False
+        self.enable_device.value = False
+        self.speed_device.value = 0
+        self.forward_device.close()
+        self.reverse_device.close()
+        self.speed_device.close()
+        self.enable_device.close()

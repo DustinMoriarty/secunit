@@ -26,6 +26,9 @@ class MockMotor(MotorAbc):
     def disable(self):
         self._enabled = False
 
+    def close(self):
+        ...
+
 
 @pytest.fixture()
 def left_motor():
@@ -39,12 +42,14 @@ def right_motor():
 
 @pytest.fixture()
 def drive_train(left_motor, right_motor):
-    return DriveTrain(left_motor, right_motor)
+    dt = DriveTrain(left_motor, right_motor)
+    yield dt
+    dt.close()
 
 
 @pytest.fixture()
 def pin_factory():
-    original_factory = Device.pin_factory
     Device.pin_factory = MockFactory(pin_class=MockPWMPin)
     yield Device.pin_factory
-    Device.pin_factory = original_factory
+    Device.pin_factory.close()
+    Device.pin_factory = None

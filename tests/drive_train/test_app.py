@@ -3,15 +3,18 @@ import pytest
 from secunit.config.app import get_type
 from secunit.drive_train import APP, DriveTrain
 
+from gpiozero.pins import Factory
+from typing import Dict
+
 
 @pytest.fixture()
-def drive_train_config():
+def drive_train_config() -> Dict:
     return {
         "drive_train": {
             "left_motor": {
                 "type": "ThreePinMotor",
                 "forward_device": {"pin": 1},
-                "reverse_device": {"pin": 2},
+                "reverse_device": {"pin": "2"},
                 "speed_device": {"pin": 3},
                 "enable_device": {"pin": 4},
             },
@@ -26,39 +29,39 @@ def drive_train_config():
     }
 
 
-def test_app(drive_train_config, pin_factory):
+def test_app(pin_factory: Factory, drive_train_config: Dict):
     drive_train: DriveTrain = APP.build(
         get_type(DriveTrain), drive_train_config["drive_train"]
     )
     assert (
-        drive_train_config["drive_train"]["left_motor"]["forward_device"]["pin"]
+        int(drive_train_config["drive_train"]["left_motor"]["forward_device"]["pin"])
         == drive_train.left_motor.forward_device.pin.number
     )
     assert (
-            drive_train_config["drive_train"]["left_motor"]["reverse_device"]["pin"]
-            == drive_train.left_motor.reverse_device.pin.number
+        int(drive_train_config["drive_train"]["left_motor"]["reverse_device"]["pin"])
+        == drive_train.left_motor.reverse_device.pin.number
     )
     assert (
-            drive_train_config["drive_train"]["left_motor"]["speed_device"]["pin"]
-            == drive_train.left_motor.speed_device.pin.number
+        drive_train_config["drive_train"]["left_motor"]["speed_device"]["pin"]
+        == drive_train.left_motor.speed_device.pin.number
     )
     assert (
-            drive_train_config["drive_train"]["left_motor"]["enable_device"]["pin"]
-            == drive_train.left_motor.enable_device.pin.number
+        int(drive_train_config["drive_train"]["left_motor"]["enable_device"]["pin"])
+        == drive_train.left_motor.enable_device.pin.number
     )
     assert (
-            drive_train_config["drive_train"]["right_motor"]["forward_device"]["pin"]
-            == drive_train.right_motor.forward_device.pin.number
+        int(drive_train_config["drive_train"]["right_motor"]["forward_device"]["pin"])
+        == drive_train.right_motor.forward_device.pin.number
     )
     assert (
-            drive_train_config["drive_train"]["right_motor"]["reverse_device"]["pin"]
-            == drive_train.right_motor.reverse_device.pin.number
+        int(drive_train_config["drive_train"]["right_motor"]["reverse_device"]["pin"])
+        == drive_train.right_motor.reverse_device.pin.number
     )
     assert (
-            drive_train_config["drive_train"]["right_motor"]["speed_device"]["pin"]
-            == drive_train.right_motor.speed_device.pin.number
+        int(drive_train_config["drive_train"]["right_motor"]["speed_device"]["pin"])
+        == drive_train.right_motor.speed_device.pin.number
     )
     assert (
-            drive_train_config["drive_train"]["right_motor"]["enable_device"]["pin"]
-            == drive_train.right_motor.enable_device.pin.number
+        int(drive_train_config["drive_train"]["right_motor"]["enable_device"]["pin"])
+        == drive_train.right_motor.enable_device.pin.number
     )

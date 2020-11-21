@@ -20,3 +20,7 @@ class DriveTrain:
     def stop(self):
         self.left_motor.stop()
         self.right_motor.stop()
+
+    def close(self):
+        self.left_motor.close()
+        self.right_motor.close()

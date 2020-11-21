@@ -5,16 +5,19 @@ from gpiozero import DigitalOutputDevice, PWMOutputDevice
 
 from secunit.config.app import get_type
 from secunit.drive_train.motor import APP, ThreePinMotor
+from gpiozero.pins import Factory
 
 
 @pytest.fixture()
 def three_pin_motor(pin_factory):
-    return ThreePinMotor(
+    motor = ThreePinMotor(
         DigitalOutputDevice(1),
         DigitalOutputDevice(2),
         PWMOutputDevice(3),
         DigitalOutputDevice(4),
     )
+    yield motor
+    motor.close()
 
 
 @pytest.mark.parametrize(
@@ -66,7 +69,7 @@ def test_three_pin_motor_stop(three_pin_motor: ThreePinMotor):
     assert three_pin_motor.speed_device.value == 0
 
 
-def test_app(pin_factory):
+def test_app(pin_factory: Factory):
     context = {
         "forward_device": {"pin": 26},
         "reverse_device": {"pin": 19},

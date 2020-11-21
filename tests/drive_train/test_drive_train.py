@@ -3,6 +3,7 @@ from typing import SupportsFloat
 import pytest
 
 from secunit.drive_train.drive_train import DriveTrain
+from gpiozero.pins import Factory
 
 
 @pytest.mark.parametrize(
@@ -31,7 +32,7 @@ def test_drive_train_move(
     assert expected_right_speed == drive_train.right_motor.speed
 
 
-def test_drive_train_motor_stop(drive_train: DriveTrain, pin_factory):
+def test_drive_train_motor_stop(drive_train: DriveTrain, pin_factory: Factory):
     drive_train.move(1, 1)
     drive_train.stop()
     assert drive_train.right_motor.speed == 0
