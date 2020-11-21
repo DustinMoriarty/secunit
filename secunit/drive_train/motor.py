@@ -103,6 +103,9 @@ class ThreePinMotor(MotorAbc):
         self.forward_device.value = bool(_speed > 0)
         self.reverse_device.value = bool(_speed < 0)
         self.speed_device.value = abs(_speed)
+        print(f"forward pin {self.forward_device.pin.number} value ={self.forward_device.value}")
+        print(f"reverse pin {self.reverse_device.pin.number} value ={self.reverse_device.value}")
+        print(f"speed pin {self.speed_device.pin.number} value ={self.speed_device.value}")
 
     def enable(self):
         self.enable_device.value = True

@@ -5,14 +5,14 @@
         "type": "ThreePinMotor",
         "forward_device": {"pin":  1},
         "reverse_device": {"pin":  2},
-        "enable_device": {"pin":  3},
+        "enable_device": {"pin":  6},
         "speed_device": {"pin":  12, "frequency":  10000}
       },
       "right_motor": {
         "type": "ThreePinMotor",
         "forward_device": {"pin":  4},
         "reverse_device": {"pin":  5},
-        "enable_device": {"pin":  6},
+        "enable_device": {"pin":  3},
         "speed_device": {"pin":  13, "frequency":  10000}
       }
     },

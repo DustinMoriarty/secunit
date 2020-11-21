@@ -12,17 +12,21 @@ class DriveTrain:
     def __init__(self, left_motor: MotorAbc, right_motor: MotorAbc):
         self.left_motor = left_motor
         self.right_motor = right_motor
+        self.left_motor.enable()
+        self.right_motor.enable()
 
     def move(self, translate, rotate):
+        print(f"translate={translate}, rotate={rotate}")
         speed_left = saturate(translate - rotate, -1, 1)
         speed_right = saturate(translate + rotate, -1, 1)
+        print(f"speed_left={speed_left}, speed_right={speed_right}")
         self.left_motor.move(speed_left)
         self.right_motor.move(speed_right)
 
     def step(self, translate, rotate, t=0.02):
         self.move(translate, rotate)
-        sleep(t)
-        self.stop()
+        #sleep(t)
+        #self.stop()
 
     def stop(self):
         self.left_motor.stop()
