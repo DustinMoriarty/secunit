@@ -1,20 +1,20 @@
 from typing import SupportsFloat
 
 import pytest
+from gpiozero import DigitalOutputDevice, PWMOutputDevice
 
-from secunit.drive_train.motor import ThreePinMotor, APP, DeviceFactory
 from secunit.config.app import get_type
-
-
-class MockDevice:
-    def __init__(self, pin=None):
-        self.value = None
-        self.pin = pin
+from secunit.drive_train.motor import APP, ThreePinMotor
 
 
 @pytest.fixture()
-def three_pin_motor():
-    return ThreePinMotor(MockDevice(), MockDevice(), MockDevice(), MockDevice())
+def three_pin_motor(pin_factory):
+    return ThreePinMotor(
+        DigitalOutputDevice(1),
+        DigitalOutputDevice(2),
+        PWMOutputDevice(3),
+        DigitalOutputDevice(4),
+    )
 
 
 @pytest.mark.parametrize(
@@ -66,13 +66,12 @@ def test_three_pin_motor_stop(three_pin_motor: ThreePinMotor):
     assert three_pin_motor.speed_device.value == 0
 
 
-def test_app(monkeypatch):
-    DeviceFactory.test = True
+def test_app(pin_factory):
     context = {
         "forward_device": {"pin": 26},
         "reverse_device": {"pin": 19},
         "speed_device": {"pin": 21, "frequency": 10000},
-        "enable_device": {"pin": 25}
+        "enable_device": {"pin": 25},
     }
     motor: ThreePinMotor = APP.build(get_type(ThreePinMotor), context)
     assert context["forward_device"]["pin"] == motor.forward_device.pin.number

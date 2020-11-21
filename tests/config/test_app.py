@@ -3,8 +3,8 @@ from logging import DEBUG
 import pytest
 
 from secunit.config.app import App
-from secunit.utils import default_logger
 from secunit.config.component import Component
+from secunit.utils import default_logger
 
 
 @pytest.fixture()

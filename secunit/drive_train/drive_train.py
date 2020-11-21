@@ -1,6 +1,6 @@
+from secunit.config import App
 from secunit.drive_train.motor import MotorAbc
 from secunit.utils import saturate
-from secunit.config import App
 
 APP = App()
 

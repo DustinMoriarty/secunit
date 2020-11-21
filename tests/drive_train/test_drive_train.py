@@ -31,7 +31,7 @@ def test_drive_train_move(
     assert expected_right_speed == drive_train.right_motor.speed
 
 
-def test_drive_train_motor_stop(drive_train: DriveTrain):
+def test_drive_train_motor_stop(drive_train: DriveTrain, pin_factory):
     drive_train.move(1, 1)
     drive_train.stop()
     assert drive_train.right_motor.speed == 0

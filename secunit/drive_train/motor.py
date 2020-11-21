@@ -4,8 +4,8 @@ from typing import SupportsAbs, SupportsFloat, Union
 from gpiozero import DigitalOutputDevice, PWMOutputDevice
 from gpiozero.pins.mock import MockFactory, MockPin, MockPWMPin
 
-from secunit.utils import saturate
 from secunit.config import App
+from secunit.utils import saturate
 
 APP = App()
 
@@ -38,41 +38,28 @@ class MotorAbc(ABC):
         ...
 
 
-class DeviceFactory:
-    test = False
+@APP.component(pin=int, active_high=bool, initial_value=bool)
+def digital_output_device(pin=None, active_high=True, initial_value=False):
+    return DigitalOutputDevice(
+        pin=pin, active_high=active_high, initial_value=initial_value
+    )
 
-    # TODO: These class methods don't quite work with component.
-    @classmethod
-    @APP.component(pin=int, active_high=bool, initial_value=bool, test=bool)
-    def digital_output_device(cls, pin=None, active_high=True, initial_value=False):
-        if cls.test:
-            return MockPin(MockFactory(), pin)
-        else:
-            return DigitalOutputDevice(
-            pin=pin,
-            active_high=active_high,
-            initial_value=initial_value
-        )
 
-    @classmethod
-    @APP.component(pin=int, active_high=bool, initial_value=bool, test=bool, frequency=int)
-    def pwm_output_device(cls, pin=None, active_high=True, initial_value=0,
-                          frequency=100, test=False):
-        if cls.test:
-            return MockPWMPin(MockFactory(), pin)
-        else:
-            return PWMOutputDevice(
-                pin=pin, active_high=active_high, initial_value=initial_value,
-                frequency=frequency,
-                pin_factory=MockFactory() if test else None
-            )
+@APP.component(pin=int, active_high=bool, initial_value=bool, frequency=int)
+def pwm_output_device(pin=None, active_high=True, initial_value=0, frequency=100):
+    return PWMOutputDevice(
+        pin=pin,
+        active_high=active_high,
+        initial_value=initial_value,
+        frequency=frequency,
+    )
 
 
 @APP.component(
-    forward_device=DeviceFactory.digital_output_device,
-    reverse_device=DeviceFactory.digital_output_device,
-    speed_device=DeviceFactory.pwm_output_device,
-    enable_device=DeviceFactory.digital_output_device
+    forward_device=digital_output_device,
+    reverse_device=digital_output_device,
+    speed_device=pwm_output_device,
+    enable_device=digital_output_device,
 )
 class ThreePinMotor(MotorAbc):
     def __init__(

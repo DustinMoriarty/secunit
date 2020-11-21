@@ -2,8 +2,12 @@ from logging import INFO
 from typing import Callable, Dict, Text, Tuple
 
 from secunit.config.component import Component
-from secunit.config.exc import (ComponentNotFound, InvalidConfigKey,
-                                TypeNotDefined, AppMergeCollisions)
+from secunit.config.exc import (
+    AppMergeCollisions,
+    ComponentNotFound,
+    InvalidConfigKey,
+    TypeNotDefined,
+)
 from secunit.utils import default_logger
 
 
@@ -75,7 +79,7 @@ class App:
                     arg_tp = str(arg.pop("type"))
                 else:
                     raise TypeNotDefined(
-                        f"Unable to determine type for {arg_name} in {tp}"
+                        f"Unable to determine type for {arg_name} in config object {tp}"
                     )
                 _kwargs[arg_name] = self.build(arg_tp, arg)
             else:
@@ -83,7 +87,7 @@ class App:
                     arg_tp = constructor.arg_types[arg_name]
                 except KeyError:
                     raise InvalidConfigKey(
-                        f"Config key {arg_name} not in {constructor.arg_types.values()}"
+                        f"Config key {arg_name} not in {constructor.arg_types.keys()}"
                     )
                 _kwargs[arg_name] = arg_tp(arg)
         return constructor.callback(**_kwargs)

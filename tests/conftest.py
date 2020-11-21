@@ -1,6 +1,8 @@
 from typing import SupportsFloat
 
 import pytest
+from gpiozero import Device
+from gpiozero.pins.mock import MockFactory, MockPWMPin
 
 from secunit.drive_train.drive_train import DriveTrain
 from secunit.drive_train.motor import MotorAbc
@@ -38,3 +40,11 @@ def right_motor():
 @pytest.fixture()
 def drive_train(left_motor, right_motor):
     return DriveTrain(left_motor, right_motor)
+
+
+@pytest.fixture()
+def pin_factory():
+    original_factory = Device.pin_factory
+    Device.pin_factory = MockFactory(pin_class=MockPWMPin)
+    yield Device.pin_factory
+    Device.pin_factory = original_factory

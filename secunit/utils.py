@@ -1,6 +1,6 @@
-from logging import getLogger, StreamHandler, Formatter, INFO
-from sys import stderr
 import os
+from logging import INFO, Formatter, StreamHandler, getLogger
+from sys import stderr
 
 
 def saturate(value, min, max):
