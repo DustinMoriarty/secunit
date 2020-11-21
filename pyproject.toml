@@ -3,6 +3,7 @@ name = "secunit"
 version = "0.1.0"
 description = ""
 authors = ["DustinMoriarty <dustin.moriarty@protonmail.com>"]
+include = ["secunit/resources/settings.json"]
 
 [tool.poetry.dependencies]
 python = "^3.7.3"
