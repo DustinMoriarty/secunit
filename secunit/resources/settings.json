@@ -14,8 +14,8 @@
         "reverse_device": {"pin":  5},
         "enable_device": {"pin":  3},
         "speed_device": {"pin":  13, "frequency":  10000}
-      }
-    },
-    "TIME_STEP": 0.5
+      },
+      "time_step": 0.5
+    }
   }
 }

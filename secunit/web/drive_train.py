@@ -9,6 +9,6 @@ drive_train_app = Blueprint("drive_train", "drive_train", url_prefix="/drive_tra
 def step():
     data = request.json
     config().drive_train.step(
-        data["translate"], data["rotate"], config().time_step
+        data["translate"], data["rotate"]
     )
-    return jsonify(drive_train_state(config().drive_train))
+    return jsonify(drive_train_state(config().drive_train)._asdict())

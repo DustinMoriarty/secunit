@@ -7,26 +7,34 @@ from typing import NamedTuple, SupportsFloat
 APP = App()
 
 
+class DriveTrainState(NamedTuple):
+    left_motor_speed: SupportsFloat
+    right_motor_speed: SupportsFloat
+
+
 @APP.component()
 class DriveTrain:
-    def __init__(self, left_motor: MotorAbc, right_motor: MotorAbc):
+    def __init__(self, left_motor: MotorAbc, right_motor: MotorAbc, step_size=0.5):
         self.left_motor = left_motor
         self.right_motor = right_motor
-        self.left_motor.enable()
-        self.right_motor.enable()
+        self.step_size = step_size
 
-    def move(self, translate, rotate):
-        print(f"translate={translate}, rotate={rotate}")
+    @property
+    def state(self) -> DriveTrainState:
+        return DriveTrainState(self.left_motor.speed, self.right_motor.speed)
+
+    def move(self, translate, rotate) -> DriveTrainState:
         speed_left = saturate(translate - rotate, -1, 1)
         speed_right = saturate(translate + rotate, -1, 1)
-        print(f"speed_left={speed_left}, speed_right={speed_right}")
         self.left_motor.move(speed_left)
         self.right_motor.move(speed_right)
+        return self.state
 
-    def step(self, translate, rotate, t=0.02):
-        self.move(translate, rotate)
-        #sleep(t)
-        #self.stop()
+    def step(self, translate, rotate) -> DriveTrainState:
+        state = self.move(translate, rotate)
+        sleep(self.step_size)
+        self.stop()
+        return state
 
     def stop(self):
         self.left_motor.stop()
@@ -36,11 +44,6 @@ class DriveTrain:
         self.left_motor.close()
         self.right_motor.close()
 
-
-class DriveTrainState(NamedTuple):
-    left_motor_speed: SupportsFloat
-    right_motor_speed: SupportsFloat
-
-
-def drive_train_state(drive_train: DriveTrain):
-    return DriveTrainState(drive_train.left_motor.speed, drive_train.right_motor.speed)
+    def enable(self):
+        self.left_motor.enable()
+        self.right_motor.enable()

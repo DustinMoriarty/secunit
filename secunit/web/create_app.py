@@ -35,7 +35,6 @@ def create_app() -> Flask:
                 "DriveTrain",
                 sec_unit_config["DRIVE_TRAIN"]
             ),
-            float(sec_unit_config["TIME_STEP"]),
             pin_factory
         )
     except KeyError as e:
