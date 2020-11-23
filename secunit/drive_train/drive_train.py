@@ -14,10 +14,10 @@ class DriveTrainState(NamedTuple):
 
 @APP.component()
 class DriveTrain:
-    def __init__(self, left_motor: MotorAbc, right_motor: MotorAbc, step_size=0.5):
+    def __init__(self, left_motor: MotorAbc, right_motor: MotorAbc, time_step=0.5):
         self.left_motor = left_motor
         self.right_motor = right_motor
-        self.step_size = step_size
+        self.time_step = time_step
 
     @property
     def state(self) -> DriveTrainState:
@@ -32,7 +32,7 @@ class DriveTrain:
 
     def step(self, translate, rotate) -> DriveTrainState:
         state = self.move(translate, rotate)
-        sleep(self.step_size)
+        sleep(self.time_step)
         self.stop()
         return state
 
@@ -43,7 +43,9 @@ class DriveTrain:
     def close(self):
         self.left_motor.close()
         self.right_motor.close()
+        return self.state
 
     def enable(self):
         self.left_motor.enable()
         self.right_motor.enable()
+        return self.state
