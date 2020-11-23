@@ -1,8 +1,9 @@
+from time import sleep
+from typing import NamedTuple, SupportsFloat
+
 from secunit.config import App
 from secunit.drive_train.motor import MotorAbc
 from secunit.utils import saturate
-from time import sleep
-from typing import NamedTuple, SupportsFloat
 
 APP = App()
 

@@ -2,17 +2,11 @@ from logging import INFO
 from typing import Callable, Dict, Text, Tuple
 
 from secunit.config.component import Component
-from secunit.config.exc import (
-    AppMergeCollisions,
-    ComponentNotFound,
-    InvalidConfigKey,
-    TypeNotDefined,
-)
+from secunit.config.exc import (AppMergeCollisions, ComponentNotFound,
+                                InvalidConfigKey, TypeNotDefined)
+from secunit.config.selectable_type import SelectableType
+from secunit.config.utils import get_type
 from secunit.utils import default_logger
-
-
-def get_type(f: Callable):
-    return f.__name__
 
 
 class App:
@@ -64,6 +58,14 @@ class App:
 
         return wrapper
 
+    def selectable_component(self, name, *constructors):
+        selectable_constructor = SelectableType(name, *constructors)
+        # TODO: Need kwargs for Component.
+        self.set_constructor(
+            get_type(selectable_constructor), Component(selectable_constructor)
+        )
+        return selectable_constructor
+
     def build(self, tp: Text, context: Dict):
         self.logger.debug(f"Building type {tp} from {context}")
         try:
@@ -73,12 +75,9 @@ class App:
         _kwargs = {}
         for arg_name, arg in context.items():
             if hasattr(arg, "items"):
-                if arg_name in constructor.arg_types:
-                    arg_tp = str(get_type(constructor.arg_types[arg_name]))
-                elif arg_name.lower() in constructor.arg_types:
+                # Recursion for nested dictionaries/constructors.
+                if arg_name.lower() in constructor.arg_types:
                     arg_tp = str(get_type(constructor.arg_types[arg_name.lower()]))
-                elif "type" in arg:
-                    arg_tp = str(arg.pop("type"))
                 else:
                     raise TypeNotDefined(
                         f"Unable to determine type for {arg_name} in config object {tp}"

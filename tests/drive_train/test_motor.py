@@ -2,10 +2,10 @@ from typing import SupportsFloat
 
 import pytest
 from gpiozero import DigitalOutputDevice, PWMOutputDevice
-
-from secunit.config.app import get_type
-from secunit.drive_train.motor import APP, ThreePinMotor
 from gpiozero.pins import Factory
+
+from secunit.config.utils import get_type
+from secunit.drive_train.motor import APP, ThreePinMotor
 
 
 @pytest.fixture()

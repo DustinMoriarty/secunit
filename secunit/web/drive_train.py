@@ -1,4 +1,5 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, jsonify, request
+
 from secunit.web.config import config
 
 drive_train_app = Blueprint("drive_train", "drive_train", url_prefix="/drive_train")

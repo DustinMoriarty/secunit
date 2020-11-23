@@ -1,7 +1,9 @@
-from flask import current_app
-from secunit.drive_train import DriveTrain
 from typing import NamedTuple, SupportsFloat
+
+from flask import current_app
 from gpiozero.pins import Factory
+
+from secunit.drive_train import DriveTrain
 
 
 class Config(NamedTuple):
@@ -12,4 +14,3 @@ class Config(NamedTuple):
 
 def config() -> Config:
     return current_app.extensions["SECUNIT"]
-
