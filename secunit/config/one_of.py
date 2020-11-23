@@ -1,17 +1,15 @@
-from typing import Callable, Dict, Text
+from typing import Iterator, Callable
 
 from secunit.config.exc import TypeNotDefined
 from secunit.config.utils import get_type
+from collections.abc import Mapping
 
 
-class SelectableTypeNoConstructors(Exception):
-    ...
+class OneOf(Mapping):
 
-
-class SelectableType:
-    def __init__(self, name, *constructors):
-        self.constructors = {}
-        self.update(*constructors)
+    def __init__(self, name, *callables: Callable):
+        self.callables = {}
+        self.update(*callables)
         self.__name__ = name
 
     def __call__(self, **kwargs):
@@ -22,13 +20,22 @@ class SelectableType:
             raise TypeError(
                 f'{self.__name__} missing required argument "type" in kwargs'
             )
-        tp = self.constructors.get(type_name)
+        tp = self.callables.get(type_name)
         if tp is None:
             raise TypeNotDefined(f"Type {tp} not defined for {type(self)}")
         return tp(**kwargs)
 
-    def update(self, *constructors):
-        self.constructors.update({get_type(t): t for t in constructors})
+    def __getitem__(self, item):
+        return self.callables[item]
+
+    def __iter__(self) -> Iterator[Callable]:
+        return iter(self.callables)
+
+    def __len__(self) -> int:
+        return len(self.callables)
+
+    def update(self, *callables: Callable):
+        self.callables.update({get_type(t): t for t in callables})
 
     def type(self, f):
         """

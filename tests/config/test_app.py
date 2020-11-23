@@ -3,7 +3,7 @@ from logging import DEBUG
 import pytest
 
 from secunit.config.app import App
-from secunit.config.selectable_type import SelectableType
+from secunit.config.one_of import OneOf
 from secunit.utils import default_logger
 
 
@@ -31,11 +31,6 @@ def app():
 
     @app.component(child_component=MockComponentA)
     class MockParentComponent:
-        def __init__(self, child_component: MockComponentA):
-            self.child_component = child_component
-
-    @app.component()
-    class MockParentComponentDynamic:
         def __init__(self, child_component: MockComponentA):
             self.child_component = child_component
 

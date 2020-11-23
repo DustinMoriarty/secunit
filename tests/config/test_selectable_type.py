@@ -1,12 +1,12 @@
 import pytest
 
-from secunit.config.selectable_type import SelectableType
+from secunit.config.one_of import OneOf
 from secunit.config.utils import get_type
 
 
 @pytest.fixture()
 def selectable_type_a():
-    TypeA = SelectableType("TypeA")
+    TypeA = OneOf("TypeA")
 
     @TypeA.type
     class MockType1:
