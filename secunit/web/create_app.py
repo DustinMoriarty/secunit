@@ -2,13 +2,14 @@ import json
 from pathlib import Path
 from typing import Dict
 
+from config_injector import Injector
 from flask import Flask
 from gpiozero import Device
 
-from secunit.drive_train import APP as DRIVE_TRAIN_APP
 from secunit.drive_train.motor import mock_factory
-from secunit.web.config import Config
+from secunit.exc import KeyNotInConfig
 from secunit.web.drive_train import drive_train_app
+from secunit.config import secunit
 
 RESOURCES_DIRECTORY = Path(__file__).parent.parent / "resources"
 DEFAULT_SETTINGS_FILE = RESOURCES_DIRECTORY / "settings.json"
@@ -26,16 +27,11 @@ def create_app() -> Flask:
     app.config.from_json("settings.json", silent=True)
     if app.env.lower() == "testing":
         app.testing = True
-    pin_factory = mock_factory() if app.testing else None
-    Device.pin_factory = pin_factory
     try:
-        sec_unit_config = settings["SECUNIT"]
-        sec_unit_config.update(app.config.get("SECUNIT", {}))
-        app.extensions["SECUNIT"] = Config(
-            DRIVE_TRAIN_APP.build("DriveTrain", sec_unit_config["DRIVE_TRAIN"]),
-            pin_factory,
-        )
+        context = settings["SECUNIT"]
     except KeyError as e:
         raise KeyNotInConfig(e)
+    injector = Injector(context=context)
+    app.extensions["SECUNIT"] = injector.instantiate(secunit)
     app.register_blueprint(drive_train_app)
     return app

@@ -1,0 +1,6 @@
+class SecunitError(Exception):
+    ...
+
+
+class KeyNotInConfig(SecunitError):
+    ...

@@ -2,19 +2,16 @@ from typing import SupportsFloat
 
 import pytest
 from gpiozero import DigitalOutputDevice, PWMOutputDevice
-from gpiozero.pins import Factory
 
-from secunit.config.utils import get_type
-from secunit.drive_train.motor import APP, ThreePinMotor
+from secunit.drive_train.motor import ThreePinMotor
 
 
 @pytest.fixture()
 def three_pin_motor(pin_factory):
     motor = ThreePinMotor(
-        DigitalOutputDevice(1),
-        DigitalOutputDevice(2),
-        PWMOutputDevice(3),
-        DigitalOutputDevice(4),
+        DigitalOutputDevice(1, pin_factory=pin_factory),
+        DigitalOutputDevice(2, pin_factory=pin_factory),
+        PWMOutputDevice(3, pin_factory=pin_factory),
     )
     yield motor
     motor.close()
@@ -49,32 +46,9 @@ def test_three_pin_motor_speed(three_pin_motor: ThreePinMotor, speed):
     assert float(three_pin_motor.speed) == float(speed)
 
 
-def test_three_pin_motor_enable(three_pin_motor: ThreePinMotor):
-    three_pin_motor.disable()
-    three_pin_motor.enable()
-    assert three_pin_motor.enable_device.value
-
-
-def test_three_pin_motor_disable(three_pin_motor: ThreePinMotor):
-    three_pin_motor.enable()
-    three_pin_motor.disable()
-    assert not three_pin_motor.enable_device.value
-
-
 def test_three_pin_motor_stop(three_pin_motor: ThreePinMotor):
     three_pin_motor.move(1)
     three_pin_motor.stop()
     assert not three_pin_motor.forward_device.value
     assert not three_pin_motor.reverse_device.value
     assert three_pin_motor.speed_device.value == 0
-
-
-def test_app(pin_factory: Factory):
-    context = {
-        "forward_device": {"pin": 26},
-        "reverse_device": {"pin": 19},
-        "speed_device": {"pin": 21, "frequency": 10000},
-        "enable_device": {"pin": 25},
-    }
-    motor: ThreePinMotor = APP.build(get_type(ThreePinMotor), context)
-    assert context["forward_device"]["pin"] == motor.forward_device.pin.number

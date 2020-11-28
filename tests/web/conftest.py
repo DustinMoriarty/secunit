@@ -7,9 +7,10 @@ from secunit.web.create_app import create_app
 
 
 @pytest.fixture()
-def flask_app() -> Flask:
+def flask_app(pin_factory) -> Flask:
     os.environ["FLASK_ENV"] = "testing"
-    return create_app()
+    app = create_app()
+    yield app
 
 
 @pytest.fixture()
