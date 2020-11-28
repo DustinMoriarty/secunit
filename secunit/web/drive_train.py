@@ -1,6 +1,6 @@
-from flask import Blueprint, request, jsonify
-from secunit.drive_train.drive_train import drive_train_state
-from secunit.web.config import config
+from flask import Blueprint, jsonify, request
+
+from secunit.web.settings import settings
 
 drive_train_app = Blueprint("drive_train", "drive_train", url_prefix="/drive_train")
 
@@ -8,7 +8,4 @@ drive_train_app = Blueprint("drive_train", "drive_train", url_prefix="/drive_tra
 @drive_train_app.route("/step", methods=["PUT"])
 def step():
     data = request.json
-    config().drive_train.step(
-        data["translate"], data["rotate"], config().time_step
-    )
-    return jsonify(drive_train_state(config().drive_train))
+    return jsonify(settings().drive_train.step(**data)._asdict())
