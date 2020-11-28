@@ -1,9 +1,9 @@
 from typing import SupportsFloat
 
 import pytest
+from gpiozero.pins import Factory
 
 from secunit.drive_train.drive_train import DriveTrain
-from gpiozero.pins import Factory
 
 
 @pytest.mark.parametrize(

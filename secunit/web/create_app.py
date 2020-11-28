@@ -1,13 +1,15 @@
-from flask import Flask
-from secunit.web.drive_train import drive_train_app
-from secunit.drive_train import APP as DRIVE_TRAIN_APP
-from secunit.web.config import Config
+import json
 from pathlib import Path
 from typing import Dict
-import json
-from secunit.config.exc import KeyNotInConfig
-from secunit.drive_train.motor import mock_factory
+
+from flask import Flask
 from gpiozero import Device
+
+from secunit.config.exc import KeyNotInConfig
+from secunit.drive_train import APP as DRIVE_TRAIN_APP
+from secunit.drive_train.motor import mock_factory
+from secunit.web.config import Config
+from secunit.web.drive_train import drive_train_app
 
 RESOURCES_DIRECTORY = Path(__file__).parent.parent / "resources"
 DEFAULT_SETTINGS_FILE = RESOURCES_DIRECTORY / "settings.json"
@@ -31,12 +33,8 @@ def create_app() -> Flask:
         sec_unit_config = settings["SECUNIT"]
         sec_unit_config.update(app.config.get("SECUNIT", {}))
         app.extensions["SECUNIT"] = Config(
-            DRIVE_TRAIN_APP.build(
-                "DriveTrain",
-                sec_unit_config["DRIVE_TRAIN"]
-            ),
-            float(sec_unit_config["TIME_STEP"]),
-            pin_factory
+            DRIVE_TRAIN_APP.build("DriveTrain", sec_unit_config["DRIVE_TRAIN"]),
+            pin_factory,
         )
     except KeyError as e:
         raise KeyNotInConfig(e)

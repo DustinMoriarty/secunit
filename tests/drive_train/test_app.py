@@ -1,10 +1,10 @@
-import pytest
-
-from secunit.config.app import get_type
-from secunit.drive_train import APP, DriveTrain
-
-from gpiozero.pins import Factory
 from typing import Dict
+
+import pytest
+from gpiozero.pins import Factory
+
+from secunit.config.utils import get_type
+from secunit.drive_train import APP, DriveTrain
 
 
 @pytest.fixture()

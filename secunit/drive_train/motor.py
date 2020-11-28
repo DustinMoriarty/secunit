@@ -4,11 +4,7 @@ from typing import SupportsAbs, SupportsFloat, Union
 from gpiozero import DigitalOutputDevice, PWMOutputDevice
 from gpiozero.pins.mock import MockFactory, MockPWMPin
 
-from secunit.config import App
 from secunit.utils import saturate
-
-APP = App()
-
 
 class MotorAbc(ABC):
     @property
@@ -42,19 +38,16 @@ class MotorAbc(ABC):
         ...
 
 
-@APP.component()
 def mock_factory():
     return MockFactory(pin_class=MockPWMPin)
 
 
-@APP.component(pin=int, active_high=bool, initial_value=bool)
 def digital_output_device(pin=None, active_high=True, initial_value=False):
     return DigitalOutputDevice(
         pin=pin, active_high=active_high, initial_value=initial_value
     )
 
 
-@APP.component(pin=int, active_high=bool, initial_value=bool, frequency=int)
 def pwm_output_device(pin=None, active_high=True, initial_value=0, frequency=100):
     return PWMOutputDevice(
         pin=pin,
@@ -64,12 +57,6 @@ def pwm_output_device(pin=None, active_high=True, initial_value=0, frequency=100
     )
 
 
-@APP.component(
-    forward_device=digital_output_device,
-    reverse_device=digital_output_device,
-    speed_device=pwm_output_device,
-    enable_device=digital_output_device,
-)
 class ThreePinMotor(MotorAbc):
     def __init__(
         self,
@@ -103,9 +90,6 @@ class ThreePinMotor(MotorAbc):
         self.forward_device.value = bool(_speed > 0)
         self.reverse_device.value = bool(_speed < 0)
         self.speed_device.value = abs(_speed)
-        print(f"forward pin {self.forward_device.pin.number} value ={self.forward_device.value}")
-        print(f"reverse pin {self.reverse_device.pin.number} value ={self.reverse_device.value}")
-        print(f"speed pin {self.speed_device.pin.number} value ={self.speed_device.value}")
 
     def enable(self):
         self.enable_device.value = True
