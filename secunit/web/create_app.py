@@ -5,7 +5,6 @@ from typing import Dict
 from flask import Flask
 from gpiozero import Device
 
-from secunit.config.exc import KeyNotInConfig
 from secunit.drive_train import APP as DRIVE_TRAIN_APP
 from secunit.drive_train.motor import mock_factory
 from secunit.web.config import Config
