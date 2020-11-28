@@ -41,8 +41,3 @@ class DriveTrain:
         self.left_motor.close()
         self.right_motor.close()
         return self.state
-
-    def enable(self):
-        self.left_motor.enable()
-        self.right_motor.enable()
-        return self.state
