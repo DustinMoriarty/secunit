@@ -1,13 +1,10 @@
-from secunit.config import App
 from secunit.drive_train.motor import MotorAbc
 from secunit.utils import saturate
-from time import sleep
 from typing import NamedTuple, SupportsFloat
+from time import sleep
+from config_injector import config
 
-APP = App()
 
-
-@APP.component()
 class DriveTrain:
     def __init__(self, left_motor: MotorAbc, right_motor: MotorAbc):
         self.left_motor = left_motor
@@ -25,8 +22,8 @@ class DriveTrain:
 
     def step(self, translate, rotate, t=0.02):
         self.move(translate, rotate)
-        #sleep(t)
-        #self.stop()
+        sleep(t)
+        self.stop()
 
     def stop(self):
         self.left_motor.stop()
