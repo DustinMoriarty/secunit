@@ -1,0 +1,48 @@
+{
+  "SECUNIT": {
+    "logging": {
+      "version": 1,
+      "formatters": {
+        "json_formatter": {
+          "class": "jsonformatter.JsonFormatter",
+          "format": {
+            "Name": "name",
+            "Asctime": "asctime",
+            "LevelName": "levelname",
+            "Message": "message"
+          }
+        }
+      },
+      "handlers": {
+        "stream_handler": {
+          "class": "logging.StreamHandler",
+          "formatter": "json_formatter",
+          "level": "INFO"
+        }
+      },
+      "loggers": {
+        "flaskapp": {
+          "handlers": ["stream_handler"],
+          "level": "INFO"
+        }
+      }
+    },
+    "drive_train": {
+      "left_motor": {
+        "type": "three_pin_motor",
+        "forward_pin": 1,
+        "reverse_pin": 2,
+        "speed_pin": 12,
+        "frequency":  10000
+      },
+      "right_motor": {
+        "type": "three_pin_motor",
+        "forward_pin": 4,
+        "reverse_pin": 5,
+        "speed_pin": 13,
+        "frequency":  10000
+      },
+      "time_step": 0.5
+    }
+  }
+}
