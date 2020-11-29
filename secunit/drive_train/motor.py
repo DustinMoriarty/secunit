@@ -1,8 +1,13 @@
-from abc import ABC, abstractmethod
-from typing import SupportsAbs, SupportsFloat, Union
+from abc import ABC
+from abc import abstractmethod
+from typing import SupportsAbs
+from typing import SupportsFloat
+from typing import Union
 
-from gpiozero import DigitalOutputDevice, PWMOutputDevice
-from gpiozero.pins.mock import MockFactory, MockPWMPin
+from gpiozero import DigitalOutputDevice
+from gpiozero import PWMOutputDevice
+from gpiozero.pins.mock import MockFactory
+from gpiozero.pins.mock import MockPWMPin
 
 from secunit.utils import saturate
 

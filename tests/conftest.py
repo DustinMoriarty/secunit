@@ -1,8 +1,10 @@
 from typing import SupportsFloat
 
 import pytest
+
 from gpiozero import Device
-from gpiozero.pins.mock import MockFactory, MockPWMPin
+from gpiozero.pins.mock import MockFactory
+from gpiozero.pins.mock import MockPWMPin
 
 from secunit.drive_train.drive_train import DriveTrain
 from secunit.drive_train.motor import MotorAbc

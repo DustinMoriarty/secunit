@@ -1,7 +1,9 @@
 from typing import SupportsFloat
 
 import pytest
-from gpiozero import DigitalOutputDevice, PWMOutputDevice
+
+from gpiozero import DigitalOutputDevice
+from gpiozero import PWMOutputDevice
 
 from secunit.drive_train.motor import ThreePinMotor
 

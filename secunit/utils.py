@@ -1,5 +1,9 @@
 import os
-from logging import INFO, Formatter, StreamHandler, getLogger
+
+from logging import INFO
+from logging import Formatter
+from logging import StreamHandler
+from logging import getLogger
 from sys import stderr
 
 
@@ -23,3 +27,6 @@ def default_logger(name, level=INFO):
     fmt = Formatter(fmt="%(asctime)s %(levelname)s %(name)s %(message)s")
     sh.setFormatter(fmt)
     return logger
+
+
+APP_NAME = __package__

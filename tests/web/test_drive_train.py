@@ -11,4 +11,3 @@ def test_drive_train_step(flask_app: Flask, client: Client):
     responese_data = response.json
     assert 1 == responese_data["left_motor_speed"]
     assert 1 == responese_data["right_motor_speed"]
-

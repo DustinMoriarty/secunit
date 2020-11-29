@@ -1,5 +1,6 @@
 from time import sleep
-from typing import NamedTuple, SupportsFloat
+from typing import NamedTuple
+from typing import SupportsFloat
 
 from secunit.drive_train.motor import MotorAbc
 from secunit.utils import saturate
@@ -36,6 +37,7 @@ class DriveTrain:
     def stop(self):
         self.left_motor.stop()
         self.right_motor.stop()
+        return self.state
 
     def close(self):
         self.left_motor.close()
