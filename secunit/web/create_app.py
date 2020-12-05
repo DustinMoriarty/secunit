@@ -73,6 +73,7 @@ def create_app() -> Flask:
         APP_NAME,
         instance_relative_config=True,
         instance_path=Path().home() / f".{APP_NAME}",
+        static_url_path="/"
     )
     config = default_settings(app.env)
     app.config.update(config)
