@@ -136,3 +136,4 @@ dmypy.json
 
 # build
 .dist
+/static/node_modules/

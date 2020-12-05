@@ -25,6 +25,7 @@ from secunit.exc import InvalidFlaskEnv
 from secunit.exc import KeyNotInConfig
 from secunit.utils import APP_NAME
 from secunit.web.drive_train import drive_train_app
+from secunit.web.ui import ui_app
 
 
 RESOURCES_DIRECTORY = Path(__file__).parent.parent / "resources"
@@ -89,4 +90,5 @@ def create_app() -> Flask:
     app.logger = getLogger("flaskapp")
     app.logger.info(msg="Application setup.")
     app.register_blueprint(drive_train_app)
+    app.register_blueprint(ui_app)
     return app
