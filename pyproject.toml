@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "secunit"
-version = "0.1.0"
+version = "0.2.0"
 description = ""
 authors = ["DustinMoriarty <dustin.moriarty@protonmail.com>"]
 include = ["secunit/resources/*.json"]
