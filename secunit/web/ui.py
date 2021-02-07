@@ -1,6 +1,9 @@
-from flask import Blueprint, current_app
+from flask import Blueprint
+from flask import current_app
+
 
 ui_app = Blueprint("ui", "ui", url_prefix="")
+
 
 @ui_app.route("/", methods=["GET"])
 def root():
