@@ -1,4 +1,0 @@
-PUT http://127.0.0.1:5000/drive_train/step
-Content-Type: application/json
-
-{"translate": 1, "rotate": 1}
